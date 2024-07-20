@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use DateTimeImmutable;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -19,68 +19,38 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 25)]
-    private string $firstName;
+    private ?string $firstName = null;
 
     #[ORM\Column(length: 25)]
-    private string $lastName;
+    private ?string $lastName = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    private string $email;
+    private ?string $email = null;
 
     #[ORM\Column(length: 50)]
-    private string $password;
+    private ?string $password = null;
 
     #[ORM\Column]
-    private bool $active;
+    private ?bool $active = null;
 
     #[ORM\Column(length: 255)]
-    private string $avatar;
+    private ?string $avatar = null;
 
     #[ORM\Column(updatable: false)]
-    private DateTimeImmutable $createdAt;
+    private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private DateTimeImmutable $updatedAt;
+    private ?DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Photo::class, orphanRemoval: true)]
     private Collection $photos;
-
-    public function __construct(
-        string $firstName,
-        string $lastName,
-        string $email,
-        string $password,
-        bool $active = true,
-        string $avatar = ''
-    ) {
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->email = $email;
-        $this->password = $password;
-        $this->active = $active;
-        $this->avatar = $avatar;
-        $this->photos = new ArrayCollection();
-        $this->createdAt = new DateTimeImmutable();
-        $this->updatedAt = new DateTimeImmutable();
-    }
-
-    public function create(
-        string $firstName,
-        string $lastName,
-        string $email,
-        string $password,
-        bool $active = true,
-        string $avatar = ''
-    ): static {
-        return new self($firstName, $lastName, $email, $password, $active, $avatar);
-    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -92,7 +62,7 @@ class User
         return $this;
     }
 
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -104,12 +74,12 @@ class User
         return $this;
     }
 
-    public function getFullName(): string
+    public function getFullName(): ?string
     {
         return $this->firstName . ' ' . $this->lastName;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -121,7 +91,7 @@ class User
         return $this;
     }
 
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -145,7 +115,7 @@ class User
         return $this;
     }
 
-    public function getAvatar(): string
+    public function getAvatar(): ?string
     {
         return $this->avatar;
     }
@@ -157,7 +127,7 @@ class User
         return $this;
     }
 
-    public function getCreatedAt(): DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -169,7 +139,7 @@ class User
         return $this;
     }
 
-    public function getUpdatedAt(): DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
@@ -209,5 +179,29 @@ class User
         }
 
         return $this;
+    }
+
+    public function getUserIdentifier(): ?string
+    {
+        return $this->email;
+    }
+
+    public function getRoles(): array
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials(): void
+    {
     }
 }
