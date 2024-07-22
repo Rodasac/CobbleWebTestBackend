@@ -42,6 +42,9 @@ security:
         - { path: ^/api/users/register, roles: PUBLIC_ACCESS }
         - { path: ^/api/doc, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+    
+    encoders:
+        App\Entity\User: bcrypt
 
 when@test:
     security:

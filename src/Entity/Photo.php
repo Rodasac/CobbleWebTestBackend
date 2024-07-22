@@ -19,7 +19,7 @@ class Photo
     #[ORM\Column(length: 255)]
     private ?string $name;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text')]
     private ?string $url;
 
     #[ORM\ManyToOne(inversedBy: 'photos')]
