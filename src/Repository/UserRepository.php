@@ -16,6 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method void      save(User $user)
+ * @method User[]    findAllActiveCreatedTheLastWeek()
  */
 class UserRepository extends ServiceEntityRepository
 {
@@ -28,5 +29,18 @@ class UserRepository extends ServiceEntityRepository
     {
         $this->_em->persist($user);
         $this->_em->flush();
+    }
+
+    public function findAllActiveCreatedTheLastWeek(): array
+    {
+        $date = new \DateTime();
+        $date->modify('-7 days');
+
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.createdAt > :date')
+            ->andWhere('u.active = true')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
     }
 }

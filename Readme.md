@@ -4,8 +4,7 @@
 - PHP 8.0
 - Composer
 - Symfony CLI
-- MySQL (optional if you want to use the mysql container)
-- Docker (optional)
+- Docker
 
 # Installation
 
@@ -26,7 +25,7 @@ openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_
 openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
 ```
 
-4. Start the mysql container (optional)
+4. Start the mailer and database containers
 ```bash
 docker-compose up -d
 ```
@@ -36,7 +35,20 @@ docker-compose up -d
 php bin/console doctrine:migrations:migrate
 ```
 
-6. Start the test server
+6. Configure the cron jobs
+```bash
+crontab -e
+
+# Add the following lines
+0 0 * * 0 php /path/to/project/bin/console app:users:newsletter
+```
+
+Or you can run the command manually
+```bash
+php bin/console app:users:newsletter
+```
+
+7. Start the test server
 ```bash
 symfony server:start
 ```
