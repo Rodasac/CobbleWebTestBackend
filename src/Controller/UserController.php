@@ -117,7 +117,7 @@ final class UserController extends AbstractController
     content: new OA\JsonContent(
       type: 'object',
       properties: [
-        new OA\Property(property: 'id', type: 'integer'),
+        new OA\Property(property: 'userId', type: 'integer'),
       ]
     )
   )]
