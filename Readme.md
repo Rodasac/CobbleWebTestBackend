@@ -1,7 +1,7 @@
 # CobbleWebTestBackend - A simple backend with Symfony 5.4
 
 # Requirements
-- PHP 8.0
+- PHP 7.2 or higher
 - Composer
 - Symfony CLI
 - Docker
